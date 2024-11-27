@@ -8,7 +8,7 @@ public class dApp {
     public static void main(String[] args) {
         try {
             String encryptedFile = "data/enc.md";
-            String outputFile = "data/dec.txt";
+            String outputFile = "data/degc.txt";
             Console console = System.console();
 
             if (console == null) {
@@ -39,9 +39,9 @@ public class dApp {
                 throw new IllegalArgumentException("Invalid salt format: must be valid Base64");
             }
 
-            // Perform decryption
-            FileDecryptor decryptor = new FileDecryptor(fullMnemonic, salt);
-            decryptor.decryptFile(encryptedFile, outputFile);
+            // Perform d
+            FD decryptor = new FD(fullMnemonic, salt);
+            decryptor.dFile(encryptedFile, outputFile);
 
             // Clean up sensitive data
             Arrays.fill(fullMnemonic, null);
@@ -58,7 +58,7 @@ public class dApp {
             }
 
         } catch (Exception e) {
-            System.err.println("Decryption error: " + e.getMessage());
+            System.err.println("d error: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -24,13 +24,13 @@ public class dAppWithFiles {
                 throw new IllegalArgumentException("Invalid mnemonic: expected 24 words");
             }
 
-            // Perform decryption
-            FileDecryptor decryptor = new FileDecryptor(fullMnemonic, salt);
-            decryptor.decryptFile(encryptedFile, outputFile);
+            // Perform d
+            FD decryptor = new FD(fullMnemonic, salt);
+            decryptor.dFile(encryptedFile, outputFile);
 
             System.out.println("File decrypted successfully");
         } catch (Exception e) {
-            System.err.println("Decryption error: " + e.getMessage());
+            System.err.println("d error: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -13,7 +13,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 
-public class FileDecryptor {
+public class FD {
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int GCM_IV_LENGTH = 12;
     private static final int GCM_TAG_LENGTH = 16;
@@ -23,21 +23,21 @@ public class FileDecryptor {
     private final String[] mnemonicWords;
     private final byte[] salt;
 
-    public FileDecryptor(String[] mnemonicWords, byte[] salt) {
+    public FD(String[] mnemonicWords, byte[] salt) {
         if (mnemonicWords == null || salt == null) {
             throw new IllegalArgumentException("Mnemonic words and salt cannot be null");
         }
         if (mnemonicWords.length != 24) {
-            throw new IllegalArgumentException("Decryption requires full 24-word mnemonic");
+            throw new IllegalArgumentException("D requires full 24-word mnemonic");
         }
 
         this.mnemonicWords = Arrays.copyOf(mnemonicWords, mnemonicWords.length);
         this.salt = Arrays.copyOf(salt, salt.length);
     }
 
-    public void decryptFile(String inputFile, String outputFile) throws Exception {
-        // Use first 12 words for decryption
-        String[] decryptionWords = Arrays.copyOfRange(mnemonicWords, 0, 12);
+    public void dFile(String inputFile, String outputFile) throws Exception {
+        // Use first 12 words for d
+        String[] dWords = Arrays.copyOfRange(mnemonicWords, 0, 12);
 
         // Read and parse the encrypted file
         byte[] fileContent = Files.readAllBytes(Paths.get(inputFile));
@@ -49,17 +49,17 @@ public class FileDecryptor {
         byte[] storedHash = Arrays.copyOfRange(fileContent, GCM_IV_LENGTH, GCM_IV_LENGTH + HASH_LENGTH);
         byte[] encryptedData = Arrays.copyOfRange(fileContent, GCM_IV_LENGTH + HASH_LENGTH, fileContent.length);
 
-        // Verify the decryption words
-        byte[] decryptionHash = generateMnemonicHash(decryptionWords);
-        if (!MessageDigest.isEqual(storedHash, decryptionHash)) {
-            throw new SecurityException("Invalid decryption mnemonic words");
+        // Verify the d words
+        byte[] dHash = generateMnemonicHash(dWords);
+        if (!MessageDigest.isEqual(storedHash, dHash)) {
+            throw new SecurityException("Invalid d mnemonic words");
         }
 
-        // Generate decryption key and decrypt
-        SecretKey decryptionKey = generateKeyFromMnemonic(decryptionWords, salt);
+        // Generate d key and decrypt
+        SecretKey dKey = generateKeyFromMnemonic(dWords, salt);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         GCMParameterSpec spec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
-        cipher.init(Cipher.DECRYPT_MODE, decryptionKey, spec);
+        cipher.init(Cipher.DECRYPT_MODE, dKey, spec);
         cipher.updateAAD(storedHash);
 
         byte[] decryptedData = cipher.doFinal(encryptedData);

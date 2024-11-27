@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Arrays;
 
-public class FileEncryptor {
+public class FE {
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int GCM_IV_LENGTH = 12;
     private static final int GCM_TAG_LENGTH = 16;
@@ -17,12 +17,12 @@ public class FileEncryptor {
     private final String[] mnemonicWords;
     private final byte[] salt;
 
-    public FileEncryptor(String[] mnemonicWords, byte[] salt) {
+    public FE(String[] mnemonicWords, byte[] salt) {
         if (mnemonicWords == null || salt == null) {
             throw new IllegalArgumentException("Mnemonic words and salt cannot be null");
         }
         if (mnemonicWords.length != 12) {
-            throw new IllegalArgumentException("Encryption requires first 12 words");
+            throw new IllegalArgumentException("e requires first 12 words");
         }
 
         this.mnemonicWords = Arrays.copyOf(mnemonicWords, mnemonicWords.length);
@@ -33,12 +33,12 @@ public class FileEncryptor {
         byte[] iv = new byte[GCM_IV_LENGTH];
         new SecureRandom().nextBytes(iv);
 
-        SecretKey encryptionKey = generateKeyFromMnemonic(mnemonicWords, salt);
+        SecretKey eKey = generateKeyFromMnemonic(mnemonicWords, salt);
         byte[] mnemonicHash = generateMnemonicHash(mnemonicWords);
 
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         GCMParameterSpec spec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
-        cipher.init(Cipher.ENCRYPT_MODE, encryptionKey, spec);
+        cipher.init(Cipher.ENCRYPT_MODE, eKey, spec);
         cipher.updateAAD(mnemonicHash);
 
         // Write header information first

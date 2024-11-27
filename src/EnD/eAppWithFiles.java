@@ -19,13 +19,13 @@ public class eAppWithFiles {
             String saltString = Base64.getEncoder().encodeToString(salt);
             Files.write(Paths.get(outputFile + ".salt"), saltString.getBytes());
 
-            // Generate mnemonics and perform encryption
+            // Generate mnemonics and perform e
             MnemonicGenerator generator = new MnemonicGenerator();
             String[] fullMnemonic = generator.generateMnemonic(24);
-            String[] encryptionWords = Arrays.copyOfRange(fullMnemonic, 0, 12);
+            String[] eWords = Arrays.copyOfRange(fullMnemonic, 0, 12);
 
             // Encrypt the file
-            FileEncryptor encryptor = new FileEncryptor(encryptionWords, salt);
+            FE encryptor = new FE(eWords, salt);
             encryptor.encryptFile(inputFile, outputFile);
 
             // Save the full mnemonic for secure transfer
@@ -34,9 +34,9 @@ public class eAppWithFiles {
 
             System.out.println("File encrypted successfully");
             System.out.println("WARNING: Keep the generated .mnemonic file secure!");
-            System.out.println("Both the .salt file and .mnemonic file are required for decryption.");
+            System.out.println("Both the .salt file and .mnemonic file are required for d.");
         } catch (Exception e) {
-            System.err.println("Encryption error: " + e.getMessage());
+            System.err.println("e error: " + e.getMessage());
             e.printStackTrace();
         }
     }
