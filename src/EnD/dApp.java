@@ -1,6 +1,5 @@
 package EnD;
 
-
 import java.util.Base64;
 import java.io.Console;
 import java.util.Arrays;
