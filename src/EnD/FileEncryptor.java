@@ -12,7 +12,6 @@ public class FileEncryptor {
     private static final int GCM_IV_LENGTH = 12;
     private static final int GCM_TAG_LENGTH = 16;
     private static final int KEY_LENGTH = 256;
-    private static final int HASH_LENGTH = 64;
     private static final int BUFFER_SIZE = 8192; // 8KB chunks
 
     private final String[] mnemonicWords;
